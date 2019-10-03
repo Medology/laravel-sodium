@@ -11,7 +11,7 @@ class ServiceTest extends TestCase
 {
     /**
      * Encrypt and decrypt the message successfully with custom key.
-     * 
+     *
      * @throws DecryptException
      * @throws KeyNotFoundException
      * @throws SodiumException
@@ -46,7 +46,7 @@ class ServiceTest extends TestCase
 
     /**
      * Exception should thrown when a different key is used to decrypt the message.
-     * 
+     *
      * @throws SodiumException
      */
     public function testEncryptAndDecryptFailedWithWrongKey()
@@ -63,11 +63,11 @@ class ServiceTest extends TestCase
 
     /**
      * Proper exception should throw for different key present scenarios when encrypting.
-     * 
-     * @param string|null $defaultKey       The default key.
-     * @param string|null $customKey        The custom key.
-     * @param string      $exception        The exception that is expected.
-     * @param string      $exceptionMessage The exception message that is expected.
+     *
+     * @param  string|null          $defaultKey       The default key.
+     * @param  string|null          $customKey        The custom key.
+     * @param  string               $exception        The exception that is expected.
+     * @param  string               $exceptionMessage The exception message that is expected.
      * @throws KeyNotFoundException
      * @dataProvider keyPresenceDataProvider
      */
@@ -88,10 +88,10 @@ class ServiceTest extends TestCase
     /**
      * Proper exception should throw for different key present scenarios when decrypting.
      *
-     * @param string|null $defaultKey       The default key.
-     * @param string|null $customKey        The custom key.
-     * @param string      $exception        The exception that is expected.
-     * @param string      $exceptionMessage The exception message that is expected.
+     * @param  string|null          $defaultKey       The default key.
+     * @param  string|null          $customKey        The custom key.
+     * @param  string               $exception        The exception that is expected.
+     * @param  string               $exceptionMessage The exception message that is expected.
      * @throws KeyNotFoundException
      * @dataProvider keyPresenceDataProvider
      */
@@ -110,31 +110,31 @@ class ServiceTest extends TestCase
     }
 
     /**
-     * Data provider for the key presence tests
-     * 
+     * Data provider for the key presence tests.
+     *
      * @return array
      */
-    public function keyPresenceDataProvider(): array 
+    public function keyPresenceDataProvider(): array
     {
         return [
             'both key missing' => [
                 'default key' => null,
-                'custom key' => null,
-                'exception' => KeyNotFoundException::class,
-                'message' => KeyNotFoundException::NEITHER_KEY_NOT_FOUND_MESSAGE
+                'custom key'  => null,
+                'exception'   => KeyNotFoundException::class,
+                'message'     => KeyNotFoundException::NEITHER_KEY_NOT_FOUND_MESSAGE,
             ],
             'customer key is empty string' => [
                 'default key' => null,
-                'custom key' => '',
-                'exception' => KeyNotFoundException::class,
-                'message' => KeyNotFoundException::CUSTOM_KEY_EMPTY_MESSAGE
+                'custom key'  => '',
+                'exception'   => KeyNotFoundException::class,
+                'message'     => KeyNotFoundException::CUSTOM_KEY_EMPTY_MESSAGE,
             ],
             'default key is empty string while custom key is not provided' => [
                 'default key' => '',
-                'custom key' => null,
-                'exception' => KeyNotFoundException::class,
-                'message' => KeyNotFoundException::DEFAULT_KEY_EMPTY_MESSAGE
-            ]
+                'custom key'  => null,
+                'exception'   => KeyNotFoundException::class,
+                'message'     => KeyNotFoundException::DEFAULT_KEY_EMPTY_MESSAGE,
+            ],
         ];
     }
 }

@@ -20,13 +20,13 @@ class SodiumService implements Contract
      *
      * @param string|null $key The key to encrypt/decrypt the message.
      */
-    function __construct(string $key = null)
+    public function __construct(string $key = null)
     {
         $this->key = $key;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function encrypt(string $message, string $key = null): string
     {
@@ -42,7 +42,7 @@ class SodiumService implements Contract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function decrypt(string $message, string $key = null): string
     {
@@ -70,9 +70,9 @@ class SodiumService implements Contract
     /**
      * Generate a random entropy used to encrypt the message.
      *
-     * @param int $length The length of the entropy to generate.
-     * @return string
+     * @param  int       $length The length of the entropy to generate.
      * @throws Exception
+     * @return string
      */
     protected function entropy(int $length = SODIUM_CRYPTO_SECRETBOX_NONCEBYTES): string
     {
@@ -82,9 +82,9 @@ class SodiumService implements Contract
     /**
      * Check if key meets the requirement.
      *
-     * @param  string|null $key The key.
-     * @return string
+     * @param  string|null          $key The key.
      * @throws KeyNotFoundException
+     * @return string
      */
     protected function checkKey(string $key = null): string
     {

@@ -10,7 +10,7 @@ class DecryptException extends SodiumException
 {
     const message = 'Unable to decrypt the payload using the given key';
 
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
         if (empty($message)) {
             $message = self::message;
