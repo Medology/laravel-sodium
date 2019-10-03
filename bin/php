@@ -4,7 +4,6 @@ set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
-. "${ROOT}"/bin/lib/env.sh
 . "${ROOT}"/bin/lib/tty.sh
 . "${ROOT}"/docker/lib/images.sh
 
