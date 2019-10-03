@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Healthlabs\Sodium\Tests;
 
 use Healthlabs\Sodium\Exceptions\DecryptException;

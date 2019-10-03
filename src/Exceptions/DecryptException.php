@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Healthlabs\Sodium\Exceptions;
 
 use Throwable;
@@ -12,9 +13,6 @@ class DecryptException extends SodiumException
 
     public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
-        if (empty($message)) {
-            $message = self::message;
-        }
-        parent::__construct($message, $code, $previous);
+        parent::__construct(empty($message) ? self::message : $message, $code, $previous);
     }
 }

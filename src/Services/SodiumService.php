@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Healthlabs\Sodium\Services;
 
 use Exception;
@@ -113,17 +114,17 @@ class SodiumService implements Contract
         if ($key !== null) {
             if ($key === '') {
                 throw new KeyNotFoundException(KeyNotFoundException::CUSTOM_KEY_EMPTY_MESSAGE);
-            } else {
-                return $key;
             }
+
+            return $key;
         }
 
         if ($this->key !== null) {
             if ($this->key === '') {
                 throw new KeyNotFoundException(KeyNotFoundException::DEFAULT_KEY_EMPTY_MESSAGE);
-            } else {
-                return $this->key;
             }
+
+            return $this->key;
         }
 
         throw new KeyNotFoundException(KeyNotFoundException::NEITHER_KEY_NOT_FOUND_MESSAGE);
