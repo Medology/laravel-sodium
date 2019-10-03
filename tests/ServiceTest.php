@@ -3,6 +3,7 @@ namespace Healthlabs\Sodium\Tests;
 
 use Healthlabs\Sodium\Exceptions\DecryptException;
 use Healthlabs\Sodium\Exceptions\KeyNotFoundException;
+use Healthlabs\Sodium\Exceptions\NonceException;
 use Healthlabs\Sodium\Exceptions\SodiumException;
 use Healthlabs\Sodium\Services\SodiumService;
 use PHPUnit\Framework\TestCase;
@@ -12,8 +13,6 @@ class ServiceTest extends TestCase
     /**
      * Encrypt and decrypt the message successfully with custom key.
      *
-     * @throws DecryptException
-     * @throws KeyNotFoundException
      * @throws SodiumException
      */
     public function testEncryptAndDecryptSuccessfulUsingCustomKey()
@@ -21,7 +20,7 @@ class ServiceTest extends TestCase
         $service = new SodiumService();
         $message = 'test_message';
         $key = 'test_key';
-        $encrypted = $service->encrypt($message, $key);
+        $encrypted = $service->encrypt($message, null, $key);
         $decrypted = $service->decrypt($encrypted, $key);
         $this->assertNotEquals($message, $encrypted);
         $this->assertEquals($message, $decrypted);
@@ -55,7 +54,7 @@ class ServiceTest extends TestCase
         $message = 'test_message';
         $key = 'test_key';
         $wrongKey = 'wrong_key';
-        $encrypted = $service->encrypt($message, $key);
+        $encrypted = $service->encrypt($message, null, $key);
         $this->expectException(DecryptException::class);
         $this->expectExceptionMessage(DecryptException::message);
         $service->decrypt($encrypted, $wrongKey);
@@ -82,17 +81,17 @@ class ServiceTest extends TestCase
 
         $this->expectException($exception);
         $this->expectExceptionMessage($exceptionMessage);
-        $service->encrypt($message, $customKey);
+        $service->encrypt($message, null, $customKey);
     }
 
     /**
      * Proper exception should throw for different key present scenarios when decrypting.
      *
-     * @param  string|null          $defaultKey       The default key.
-     * @param  string|null          $customKey        The custom key.
-     * @param  string               $exception        The exception that is expected.
-     * @param  string               $exceptionMessage The exception message that is expected.
-     * @throws KeyNotFoundException
+     * @param  string|null     $defaultKey       The default key.
+     * @param  string|null     $customKey        The custom key.
+     * @param  string          $exception        The exception that is expected.
+     * @param  string          $exceptionMessage The exception message that is expected.
+     * @throws SodiumException
      * @dataProvider keyPresenceDataProvider
      */
     public function testKeyPresenceExceptionWhenForDecrypt(
@@ -106,7 +105,7 @@ class ServiceTest extends TestCase
 
         $this->expectException($exception);
         $this->expectExceptionMessage($exceptionMessage);
-        $service->encrypt($message, $customKey);
+        $service->decrypt($message, $customKey);
     }
 
     /**
@@ -136,5 +135,40 @@ class ServiceTest extends TestCase
                 'message'     => KeyNotFoundException::DEFAULT_KEY_EMPTY_MESSAGE,
             ],
         ];
+    }
+
+    /**
+     * Encrypt and decrypt the message successfully with custom nonce.
+     */
+    public function testEncryptAndDecryptSuccessfulUsingCustomNonce()
+    {
+        $service = new SodiumService();
+        $message = 'test_message';
+        $key = 'test_key';
+        $nonce = 'abcdefghijklmnopqrstuvwx';
+        $encrypted = $service->encrypt($message, $nonce, $key);
+        $decrypted = $service->decrypt($encrypted, $key);
+        $this->assertNotEquals($message, $encrypted);
+        $this->assertEquals($message, $decrypted);
+    }
+
+    /**
+     * Exception should throw when customer nonce is present but doesn't meet the requirement.
+     *
+     * @throws SodiumException
+     */
+    public function testExceptionShouldThrownWhenCustomNonceDoesNotMeetRequirement()
+    {
+        $service = new SodiumService();
+        $message = 'test_message';
+        $key = 'test_key';
+        $nonce23Char = 'abcdefghijklmnopqrstuvw';
+        $nonce25Char = 'abcdefghijklmnopqrstuvwxy';
+        $this->expectException(NonceException::class);
+        $this->expectExceptionMessage(NonceException::message);
+        $service->encrypt($message, $nonce23Char, $key);
+        $this->expectException(NonceException::class);
+        $this->expectExceptionMessage(NonceException::message);
+        $service->encrypt($message, $nonce25Char, $key);
     }
 }

@@ -6,6 +6,7 @@ use Healthlabs\Sodium\Contracts\SodiumService as Contract;
 use Healthlabs\Sodium\Exceptions\DecryptException;
 use Healthlabs\Sodium\Exceptions\KeyNotFoundException;
 use Healthlabs\Sodium\Exceptions\MalformationException;
+use Healthlabs\Sodium\Exceptions\NonceException;
 
 /**
  * The service to encrypt/decrypt messages using sodium.
@@ -28,11 +29,11 @@ class SodiumService implements Contract
     /**
      * {@inheritdoc}
      */
-    public function encrypt(string $message, string $key = null): string
+    public function encrypt(string $message, string $nonce = null, string $key = null): string
     {
-        $key = $this->checkKey($key);
+        $nonce = $this->checkNonce($nonce);
 
-        $nonce = $this->entropy();
+        $key = $this->checkKey($key);
 
         $key = sodium_crypto_generichash($key, '', SODIUM_CRYPTO_GENERICHASH_BYTES);
 
@@ -77,6 +78,27 @@ class SodiumService implements Contract
     protected function entropy(int $length = SODIUM_CRYPTO_SECRETBOX_NONCEBYTES): string
     {
         return random_bytes($length);
+    }
+
+    /**
+     * Check if custom nonce meets the requirement, if not provided, generate a random nonce.
+     *
+     * @param  string|null    $nonce A custom nonce used to encrypt the message.
+     * @throws NonceException
+     * @throws Exception
+     * @return string
+     */
+    protected function checkNonce(string $nonce = null): string
+    {
+        if ($nonce === null) {
+            return $this->entropy();
+        }
+
+        if (strlen($nonce) !== SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            throw new NonceException();
+        }
+
+        return $nonce;
     }
 
     /**
