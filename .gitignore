@@ -6,3 +6,4 @@
 /.idea/dataSources.local.xml
 /artifacts
 /vendor
+/bin/composer
