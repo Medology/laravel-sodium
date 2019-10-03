@@ -5,7 +5,8 @@
   "require": {
     "php": ">=7.1",
     "ext-dom": "*",
-    "ext-sodium": "^2.0"
+    "ext-sodium": "^2.0",
+    "illuminate/support": ">=5.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^7"
