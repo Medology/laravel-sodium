@@ -1,0 +1,79 @@
+version: 2.1
+
+commands:
+  configure_git:
+    description: Configure Git
+    steps:
+      - run:
+          name: Delete gitconfig
+          command: rm -rf ~/.gitconfig
+      - run:
+          name: Configure Git user
+          command: |
+            git config --global user.email "ci@healthlabs.com"
+            git config --global user.name "Circle CI"
+      - run:
+          name: Configure Git to use SSH instead of HTTP
+          command: |
+            git config --global url.git@github.com:.insteadOf git://github.com/
+  pull-merge:
+    description: "Bring the repository up-to-date with master and handle setup"
+    steps:
+      - checkout
+      - restore_cache:
+          key: composer-{{ checksum "composer.lock" }}
+      - run:
+          name: Configure the CircleCI git user
+          command: |
+            git config --global user.email "ci@healthlabs.com"
+            git config --global user.name "Circle CI"
+      - run:
+          name: Configure git to use SSH instead of HTTP
+          command: |
+            git config --global url.git@github.com:.insteadOf git://github.com/
+            git config --global --add url.git@github.com:.insteadOf https://github.com/
+      - run:
+          name: Merge master
+          command: git fetch origin && git merge origin/master --no-edit
+
+  build-and-test:
+    description: "Build the project."
+    steps:
+      - pull-merge
+      - restore_cache:
+          key: composer-{{ checksum "composer.lock" }}
+      - configure_git
+      - run:
+          name: Initialize the project
+          command: |
+            mkdir -p /tmp/artifacts
+            bin/init_project
+      - save_cache:
+          key: composer-{{ checksum "composer.lock" }}
+          paths:
+            - ~/.composer/cache
+      - run:
+          name: Unit Tests
+          command: phpunit --log-junit artifacts/phpunit.junit.xml
+      - store_test_results:
+          path: /tmp/artifacts
+      - store_artifacts:
+          path: /tmp/artifacts
+
+
+jobs:
+  build-and-test:
+    working_directory: /tmp/laravel_sodium
+    parallelism: 1
+    machine:
+      enabled: true
+    environment:
+      - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    steps:
+      - build-and-test
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build-and-test
