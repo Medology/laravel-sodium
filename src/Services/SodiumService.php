@@ -38,7 +38,7 @@ class SodiumService implements Contract
 
         $encrypted = sodium_crypto_secretbox($message, $nonce, $key);
 
-        return sprintf('%s.%s', sodium_bin2hex($nonce), sodium_bin2hex($encrypted));
+        return sprintf('%s.%s', sodium_bin2base64($nonce, SODIUM_BASE64_VARIANT_ORIGINAL), sodium_bin2base64($encrypted, SODIUM_BASE64_VARIANT_ORIGINAL));
     }
 
     /**
@@ -55,8 +55,8 @@ class SodiumService implements Contract
         }
 
         $decrypted = sodium_crypto_secretbox_open(
-            sodium_hex2bin($payload[1]),
-            sodium_hex2bin($payload[0]),
+            sodium_base642bin($payload[1], SODIUM_BASE64_VARIANT_ORIGINAL),
+            sodium_base642bin($payload[0], SODIUM_BASE64_VARIANT_ORIGINAL),
             sodium_crypto_generichash($key, '', SODIUM_CRYPTO_SECRETBOX_KEYBYTES)
         );
 
