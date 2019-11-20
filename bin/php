@@ -9,6 +9,8 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
 if [[ `uname` == 'Linux' ]]; then
    USER_ARG="-e LOCAL_USER_ID=`id -u`"
+else
+   USER_ARG=''
 fi
 
 docker run \
