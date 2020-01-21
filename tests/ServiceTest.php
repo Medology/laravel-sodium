@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Healthlabs\Sodium\Tests;
 
@@ -64,10 +66,11 @@ class ServiceTest extends TestCase
     /**
      * Proper exception should throw for different key present scenarios when encrypting.
      *
-     * @param  string|null          $defaultKey       The default key.
-     * @param  string|null          $customKey        The custom key.
-     * @param  string               $exception        The exception that is expected.
-     * @param  string               $exceptionMessage The exception message that is expected.
+     * @param string|null $defaultKey       the default key
+     * @param string|null $customKey        the custom key
+     * @param string      $exception        the exception that is expected
+     * @param string      $exceptionMessage the exception message that is expected
+     *
      * @throws KeyNotFoundException
      * @dataProvider keyPresenceDataProvider
      */
@@ -88,10 +91,11 @@ class ServiceTest extends TestCase
     /**
      * Proper exception should throw for different key present scenarios when decrypting.
      *
-     * @param  string|null     $defaultKey       The default key.
-     * @param  string|null     $customKey        The custom key.
-     * @param  string          $exception        The exception that is expected.
-     * @param  string          $exceptionMessage The exception message that is expected.
+     * @param string|null $defaultKey       the default key
+     * @param string|null $customKey        the custom key
+     * @param string      $exception        the exception that is expected
+     * @param string      $exceptionMessage the exception message that is expected
+     *
      * @throws SodiumException
      * @dataProvider keyPresenceDataProvider
      */
@@ -111,8 +115,6 @@ class ServiceTest extends TestCase
 
     /**
      * Data provider for the key presence tests.
-     *
-     * @return array
      */
     public function keyPresenceDataProvider(): array
     {

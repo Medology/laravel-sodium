@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Healthlabs\Sodium\Services;
 
@@ -20,7 +22,7 @@ class SodiumService implements Contract
     /**
      * SodiumService constructor.
      *
-     * @param string|null $key The key to encrypt/decrypt the message.
+     * @param string|null $key the key to encrypt/decrypt the message
      */
     public function __construct(string $key = null)
     {
@@ -72,9 +74,9 @@ class SodiumService implements Contract
     /**
      * Generate a random entropy used to encrypt the message.
      *
-     * @param  int       $length The length of the entropy to generate.
+     * @param int $length the length of the entropy to generate
+     *
      * @throws Exception
-     * @return string
      */
     protected function entropy(int $length = SODIUM_CRYPTO_SECRETBOX_NONCEBYTES): string
     {
@@ -84,10 +86,10 @@ class SodiumService implements Contract
     /**
      * Check if custom nonce meets the requirement, if not provided, generate a random nonce.
      *
-     * @param  string|null    $nonce A custom nonce used to encrypt the message.
+     * @param string|null $nonce a custom nonce used to encrypt the message
+     *
      * @throws NonceException
      * @throws Exception
-     * @return string
      */
     protected function checkNonce(string $nonce = null): string
     {
@@ -105,9 +107,9 @@ class SodiumService implements Contract
     /**
      * Check if key meets the requirement.
      *
-     * @param  string|null          $key The key.
+     * @param string|null $key the key
+     *
      * @throws KeyNotFoundException
-     * @return string
      */
     protected function checkKey(string $key = null): string
     {
