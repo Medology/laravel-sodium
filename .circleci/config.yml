@@ -16,22 +16,14 @@ commands:
           name: Configure Git to use SSH instead of HTTP
           command: |
             git config --global url.git@github.com:.insteadOf git://github.com/
+
   pull-merge:
     description: "Bring the repository up-to-date with master and handle setup"
     steps:
       - checkout
       - restore_cache:
           key: composer-{{ checksum "composer.lock" }}
-      - run:
-          name: Configure the CircleCI git user
-          command: |
-            git config --global user.email "ci@healthlabs.com"
-            git config --global user.name "Circle CI"
-      - run:
-          name: Configure git to use SSH instead of HTTP
-          command: |
-            git config --global url.git@github.com:.insteadOf git://github.com/
-            git config --global --add url.git@github.com:.insteadOf https://github.com/
+      - configure_git
       - run:
           name: Merge master
           command: git fetch origin && git merge origin/master --no-edit
@@ -42,7 +34,6 @@ commands:
       - pull-merge
       - restore_cache:
           key: composer-{{ checksum "composer.lock" }}
-      - configure_git
       - run:
           name: Initialize the project
           command: |
