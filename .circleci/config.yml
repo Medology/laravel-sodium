@@ -60,13 +60,17 @@ commands:
       - store_artifacts:
           path: /tmp/artifacts
 
+executors:
+  default:
+    machine:
+      enabled: true
+      docker_layer_caching: true
 
 jobs:
   build-and-test:
     working_directory: /tmp/laravel_sodium
     parallelism: 1
-    machine:
-      enabled: true
+    executor: default
     environment:
       - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
