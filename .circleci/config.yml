@@ -17,8 +17,8 @@ commands:
           command: |
             git config --global url.git@github.com:.insteadOf git://github.com/
 
-  pull-merge:
-    description: "Bring the repository up-to-date with master and handle setup"
+  pull-merge-restore:
+    description: "Bring the repository up-to-date with master and restore the cache"
     steps:
       - checkout
       - restore_cache:
@@ -27,13 +27,13 @@ commands:
       - run:
           name: Merge master
           command: git fetch origin && git merge origin/master --no-edit
+      - restore_cache:
+          key: composer-{{ checksum "composer.lock" }}
 
   build-and-test:
     description: "Build the project."
     steps:
-      - pull-merge
-      - restore_cache:
-          key: composer-{{ checksum "composer.lock" }}
+      - pull-merge-restore
       - run:
           name: Initialize the project
           command: |
