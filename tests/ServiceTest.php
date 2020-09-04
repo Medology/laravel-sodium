@@ -190,4 +190,17 @@ class ServiceTest extends TestCase
         $decryptedValue = $service->decryptValueByNonce($encryptedValue, $nonce);
         $this->assertSame($originalValue, $decryptedValue);
     }
+
+    /**
+     * Test that service can not decrypt a wrong encrypted value with a nonce.
+     */
+    public function testCanNotDecryptAwrongEncryptedValueByNonce()
+    {
+        $key = 'test_key';
+        $nonce = 'abcdefghijklmnopqrstuvwxyz123456';
+        $wrongEncryptedValue = 'testing';
+        $service = new SodiumService($key);
+        $decryptedValue = $service->decryptValueByNonce($wrongEncryptedValue, $nonce);
+        $this->assertNull($decryptedValue);
+    }
 }
