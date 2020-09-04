@@ -10,6 +10,7 @@ use Healthlabs\Sodium\Exceptions\DecryptException;
 use Healthlabs\Sodium\Exceptions\KeyNotFoundException;
 use Healthlabs\Sodium\Exceptions\MalformationException;
 use Healthlabs\Sodium\Exceptions\NonceException;
+use SodiumException;
 
 /**
  * The service to encrypt/decrypt messages using sodium.
@@ -139,7 +140,7 @@ class SodiumService implements Contract
     {
         try {
             return $this->decrypt($nonce ? implode('.', [$nonce, $value]) : $value);
-        } catch (DecryptException | KeyNotFoundException | MalformationException $e) {
+        } catch (DecryptException | KeyNotFoundException | MalformationException | SodiumException $e) {
             return null;
         }
     }

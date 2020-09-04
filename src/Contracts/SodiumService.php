@@ -8,6 +8,7 @@ use Exception;
 use Healthlabs\Sodium\Exceptions\DecryptException;
 use Healthlabs\Sodium\Exceptions\KeyNotFoundException;
 use Healthlabs\Sodium\Exceptions\MalformationException;
+use SodiumException;
 
 /**
  * Service contract that a implementation should follow.
@@ -35,6 +36,7 @@ interface SodiumService
      * @throws KeyNotFoundException
      * @throws MalformationException
      * @throws DecryptException
+     * @throws SodiumException
      */
     public function decrypt(string $message, string $key = null): string;
 
