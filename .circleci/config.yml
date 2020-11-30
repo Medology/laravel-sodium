@@ -1,6 +1,12 @@
 version: 2.1
 
 commands:
+  docker_hub_login:
+    description: Login to Docker Hub
+    steps:
+      - run:
+          name: Docker Hub login
+          command: docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   configure_git:
     description: Configure Git
     steps:
@@ -75,6 +81,7 @@ jobs:
     environment:
       - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
+      - docker_hub_login
       - pull-merge-restore
       - configure-php:
           version: "7.1"
@@ -87,6 +94,7 @@ jobs:
       - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
       - pull-merge-restore
+      - docker_hub_login
       - configure-php:
           version: "7.2"
       - build-and-test
@@ -98,6 +106,7 @@ jobs:
       - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
       - pull-merge-restore
+      - docker_hub_login
       - configure-php:
           version: "7.3"
       - build-and-test
@@ -109,6 +118,7 @@ jobs:
       - PATH: /opt/circleci/.pyenv/shims:./bin:./node_modules/.bin:./vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
       - pull-merge-restore
+      - docker_hub_login
       - configure-php:
           version: "7.4"
       - build-and-test
