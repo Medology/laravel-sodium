@@ -1,0 +1,3 @@
+[submodule "submodules"]
+	path = submodules
+	url = http://github.com/Medology/submodules

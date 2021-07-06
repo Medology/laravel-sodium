@@ -22,6 +22,9 @@ commands:
           name: Configure Git to use SSH instead of HTTP
           command: |
             git config --global url.git@github.com:.insteadOf git://github.com/
+      - run:
+          name: Add in submodules
+          command: git submodule update --init
 
   pull-merge-restore:
     description: "Bring the repository up-to-date with master and restore the cache"
